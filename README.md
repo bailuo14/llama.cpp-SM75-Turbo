@@ -8,10 +8,14 @@
 2080ti22G运行Qwen3.8-27B-GSQ-ROC-IQ3_XXS稳定30 tk/s+
 架构专编：-DCMAKE_CUDA_ARCHITECTURES=75-real
 只编译 sm_75（Turing），输出纯 SASS 机器码，无 PTX JIT 兜底
+
 砍掉其他所有架构（sm_50 ~ sm_90）的 kernel 代码
 DLL 从 545.8 MB → 32.1 MB，加载更快、显存占用更低
+
 Turing MMA tensor core 路径：启用 mma m16n8k8 fp16/bf16 矩阵指令——Turing 原生张量核心指令，GEMM 走专用硬件而非通用 SIMT 路径
+
 FlashAttention：sm_75 FA kernel 全量化组合编译（f16/q4_0/q8_0/bf16），长上下文 attention 更快、显存更省
+
 CUDA Graphs：ON——kernel 启动开销打包成图，短序列生成效率更高
 
 理论上只要是图灵（SM75）架构的显卡都能吃到加速，其他显卡也因此跑不了，需要的话请移步llama.cpp仓库
